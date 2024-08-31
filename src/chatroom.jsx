@@ -192,7 +192,7 @@ function ChatRoom() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [room]);
 
   const handleScreenshotChange = (event) => {
     const file = event.target.files[0];
