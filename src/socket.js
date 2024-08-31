@@ -8,7 +8,7 @@ const socket = io(SERVER_ORIGIN, {
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 5000,
-  timeout: 20000, // 20 seconds
+  timeout: 600000, // 20 seconds
 });
 
 // Handle connection events
