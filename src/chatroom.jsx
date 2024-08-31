@@ -194,6 +194,22 @@ function ChatRoom() {
     };
   }, [room]);
 
+  useEffect(() => {
+    const handleReconnect = () => {
+      console.log("Reconnected to socket");
+      if (room) {
+        socket.emit("joinRoom", { room }); // Rejoin the room
+        fetchLatestMessages(); // Fetch latest messages after reconnecting
+      }
+    };
+
+    socket.on("reconnect", handleReconnect);
+
+    return () => {
+      socket.off("reconnect", handleReconnect);
+    };
+  }, [room]);
+
   const handleScreenshotChange = (event) => {
     const file = event.target.files[0];
     if (file) {
