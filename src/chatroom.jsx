@@ -158,22 +158,6 @@ function ChatRoom() {
     setIsSubmittingReport(false); // Stop loader
   };
 
-  const fetchLatestMessages = async () => {
-    if (room) {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_SERVER_ORIGIN}/api/messages/${room}`
-        );
-        const data = await response.json();
-        if (data.success) {
-          setMessages(data.messages); // Update the messages state
-        }
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    }
-  };
-
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
@@ -182,8 +166,6 @@ function ChatRoom() {
           console.log("Reconnecting socket...");
           socket.connect(); // Reconnect the socket
         }
-
-        fetchLatestMessages(); // Implement this function to fetch messages
       }
     };
 
@@ -192,23 +174,7 @@ function ChatRoom() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [room]);
-
-  useEffect(() => {
-    const handleReconnect = () => {
-      console.log("Reconnected to socket");
-      if (room) {
-        socket.emit("joinRoom", { room }); // Rejoin the room
-        fetchLatestMessages(); // Fetch latest messages after reconnecting
-      }
-    };
-
-    socket.on("reconnect", handleReconnect);
-
-    return () => {
-      socket.off("reconnect", handleReconnect);
-    };
-  }, [room]);
+  }, []);
 
   const handleScreenshotChange = (event) => {
     const file = event.target.files[0];
