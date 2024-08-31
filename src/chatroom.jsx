@@ -286,17 +286,6 @@ function ChatRoom() {
       navigate("/"); // Redirect them back to the home page
     };
 
-    const handleDisconnect = () => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          username: "System",
-          messageText:
-            "Your partner has disconnected. Waiting for reconnection...",
-        },
-      ]);
-    };
-
     window.addEventListener("beforeunload", handleBeforeUnload);
     socket.on("userCountUpdate", handleUserCountUpdate);
     socket.on("typing", handleTyping);
@@ -304,7 +293,6 @@ function ChatRoom() {
     socket.on("matchFound", handleMatchFound);
     socket.on("userLeft", handleUserLeft);
     socket.on("banned", handleBanned); // Listen for the "banned" event
-    socket.on("disconnect", handleDisconnect); // Listen for disconnect event
 
     const interval = setInterval(() => {
       if (
@@ -325,7 +313,6 @@ function ChatRoom() {
       socket.off("matchFound", handleMatchFound);
       socket.off("userLeft", handleUserLeft);
       socket.off("banned", handleBanned); // Cleanup the "banned" event listener
-      socket.off("disconnect", handleDisconnect); // Cleanup the disconnect event listener
     };
   }, [loadingMessage, navigate, username]);
 
