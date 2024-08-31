@@ -158,6 +158,22 @@ function ChatRoom() {
     setIsSubmittingReport(false); // Stop loader
   };
 
+  const fetchLatestMessages = async () => {
+    if (room) {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_ORIGIN}/api/messages/${room}`
+        );
+        const data = await response.json();
+        if (data.success) {
+          setMessages(data.messages); // Update the messages state
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
@@ -166,6 +182,8 @@ function ChatRoom() {
           console.log("Reconnecting socket...");
           socket.connect(); // Reconnect the socket
         }
+
+        fetchLatestMessages(); // Implement this function to fetch messages
       }
     };
 
